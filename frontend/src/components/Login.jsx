@@ -19,7 +19,8 @@ export default function Login() {
   const handleSubmit = async () => {
     const endpoint = isLoginMode ? '/auth/signin' : '/auth/signup';
     try {
-      const response = await axios.post(`http://localhost:3000${endpoint}`, { email, password });
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const response = await axios.post(`${apiUrl}${endpoint}`, { email, password });
       if (isLoginMode) {
         localStorage.setItem('accessToken', response.data.access_token);
         localStorage.setItem('userEmail', email);
@@ -57,10 +58,10 @@ export default function Login() {
           <h1 style={{ fontSize: '60px', fontWeight: '900', letterSpacing: '-2px', margin: 0, color: COLORS.primary }}>PRO</h1>
           <div style={taglineStyle}>Bạn thật sự tin vào việc bạn có thể quản lý thời gian sao?</div>
         </div>
-        <img 
-          src="https://static.vecteezy.com/system/resources/thumbnails/074/173/138/small/the-majority-are-against-it-in-the-poll-political-analysis-market-research-opinion-surveys-referendums-social-studies-photo.jpg" 
-          alt="Brand image" 
-          style={imageStyle} 
+        <img
+          src="https://static.vecteezy.com/system/resources/thumbnails/074/173/138/small/the-majority-are-against-it-in-the-poll-political-analysis-market-research-opinion-surveys-referendums-social-studies-photo.jpg"
+          alt="Brand image"
+          style={imageStyle}
         />
       </div>
 
@@ -79,23 +80,23 @@ export default function Login() {
 
           <div style={{ textAlign: 'left', marginBottom: '20px' }}>
             <label style={labelStyle}>Tài khoản email</label>
-            <input 
-              type="email" 
-              placeholder="name@company.com" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              style={inputStyle} 
+            <input
+              type="email"
+              placeholder="name@company.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={inputStyle}
             />
           </div>
 
           <div style={{ textAlign: 'left', marginBottom: '30px' }}>
             <label style={labelStyle}>Mật khẩu</label>
-            <input 
-              type="password" 
-              placeholder="••••••••" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
-              style={inputStyle} 
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={inputStyle}
             />
           </div>
 
@@ -127,7 +128,7 @@ const wrapperStyle = {
   zIndex: 9999 // Đảm bảo luôn nằm trên cùng
 };
 const leftSideStyle = {
-  flex: '1.2', 
+  flex: '1.2',
   height: '100%',
   position: 'relative',
   overflow: 'hidden', // Cắt bỏ phần thừa của ảnh
@@ -148,7 +149,7 @@ const overlayTextStyle = {
   left: '100px',
   color: 'white',
   textAlign: 'left',
-  textShadow: '0 0px 20px rgba(0, 0, 0, 0.5)' 
+  textShadow: '0 0px 20px rgba(0, 0, 0, 0.5)'
 };
 const taglineStyle = {
   marginTop: '15px',
@@ -168,6 +169,13 @@ const rightSideStyle = {
   justifyContent: 'center',
   padding: '60px',
   backgroundColor: '#ffffff',
+  // --- STYLE MỚI: HIỆU ỨNG ĐÈ LÊN ẢNH ---
+  borderTopLeftRadius: '60px',
+  borderBottomLeftRadius: '60px',
+  marginLeft: '-80px', // Kéo sang trái để đè lên ảnh
+  boxShadow: '-20px 0 50px rgba(0,0,0,0.15)', // Đổ bóng sang trái
+  zIndex: 100, // Đảm bảo nằm trên ảnh
+  position: 'relative'
 };
 
 const formWrapperStyle = {
@@ -199,7 +207,7 @@ const labelStyle = {
 const inputStyle = {
   width: '100%',
   padding: '14px 20px',
-  borderRadius: '12px', // Bo tròn vừa phải theo phong cách hiện đại
+  borderRadius: '50px', // Đã bo tròn tối đa (pill shape)
   border: `1.5px solid #e2e8f0`,
   fontSize: '15px',
   color: COLORS.textMain, // Chữ bạn gõ vào sẽ có màu xanh đen đậm cực đẹp

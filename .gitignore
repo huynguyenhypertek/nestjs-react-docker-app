@@ -1,14 +1,10 @@
-# Thư mục thư viện (Đã có Docker lo nên không cần đẩy lên)
 node_modules/
 dist/
 
-# File môi trường chứa mật khẩu (Cực kỳ quan trọng để bảo mật)
 .env
 
-# Các file tạm của hệ thống
 .DS_Store
 Thumbs.db
 
-# Thư mục chứa ảnh upload (Bài 7) - Thường không đẩy ảnh test lên GitHub
 backend/uploads/*
 !backend/uploads/.gitkeep

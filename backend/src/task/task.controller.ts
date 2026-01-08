@@ -9,6 +9,7 @@ import {
   UseGuards,
   Request,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './create-task.dto';
@@ -28,14 +29,14 @@ interface AuthenticatedRequest extends Request {
 @Controller('tasks')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+  constructor(private readonly taskService: TaskService) { }
 
   @Get()
   async getAllTasks(
     // Thêm async để đồng bộ với Service
     @Request() req: AuthenticatedRequest,
-    @Query('page') page: any = 1, // Nhận any để xử lý ép kiểu an toàn hơn
-    @Query('limit') limit: any = 10,
+    @Query('page', ParseIntPipe) page: number = 1,
+    @Query('limit', ParseIntPipe) limit: number = 10,
     @Query('search') search?: string,
     @Query('status') status?: string,
   ) {

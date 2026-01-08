@@ -1,5 +1,5 @@
 // src/task/task.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './task.entity';
@@ -17,7 +17,7 @@ export class TaskService {
   constructor(
     @InjectRepository(Task)
     private repo: Repository<Task>,
-  ) {}
+  ) { }
 
   // CẬP NHẬT: Thay thế findAll bằng paginate để hỗ trợ bài 6
   async paginate(
@@ -93,7 +93,9 @@ export class TaskService {
 
     // Điều kiện Bài 7: Phải hoàn thành mới được upload
     if (task.status !== true) {
-      throw new Error('Bạn phải hoàn thành công việc trước khi upload ảnh');
+      throw new BadRequestException(
+        'Bạn phải hoàn thành công việc trước khi upload ảnh',
+      );
     }
 
     task.imageProof = filename; // Lưu tên file vào DB

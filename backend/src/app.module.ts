@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './user/user.module';
@@ -11,17 +12,22 @@ import { join } from 'path';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      // Sửa 'localhost' thành 'db' để kết nối với container database
-      host: process.env.NODE_ENV === 'production' ? 'db' : 'localhost',
-      // Sửa 5433 thành 5432 (cổng mặc định bên trong mạng Docker)
-      port: process.env.NODE_ENV === 'production' ? 5432 : 5433,
-      username: 'postgres',
-      password: 'admin123',
-      database: 'task_management',
-      entities: [User, Task],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('POSTGRES_HOST'),
+        port: parseInt(configService.get<string>('POSTGRES_PORT') || '5432'),
+        username: configService.get<string>('POSTGRES_USER'),
+        password: configService.get<string>('POSTGRES_PASSWORD'),
+        database: configService.get<string>('POSTGRES_DB'),
+        entities: [User, Task],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
@@ -33,4 +39,4 @@ import { join } from 'path';
     UploadModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
